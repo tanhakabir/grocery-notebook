@@ -49,7 +49,7 @@ const renderTag = ({ element, mime, value }: NotebookOutputEventParams) =>
     const node = document.createElement('div');
     element.appendChild(node);
 
-    render({ container: node, mimeType: mime, data: value, notebookApi });
+    render({ container: node, data: value, notebookApi });
   });
 
 function renderAllTags() {

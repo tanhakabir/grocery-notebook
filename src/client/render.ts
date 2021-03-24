@@ -10,20 +10,27 @@ import type { NotebookRendererApi } from 'vscode-notebook-renderer';
 
 interface IRenderInfo {
   container: HTMLElement;
-  mimeType: string;
   data: any;
   notebookApi: NotebookRendererApi<unknown>;
 }
 
 // This function is called to render your contents.
-export function render({ container, mimeType, data }: IRenderInfo) {
+export function render({ container, data }: IRenderInfo) {
   // Format the JSON and insert it as <pre><code>{ ... }</code></pre>
   // Replace this with your custom code!
   const pre = document.createElement('pre');
   pre.classList.add(style.json);
-  const code = document.createElement('code');
-  code.textContent = `mime type: ${mimeType}\n\n${JSON.stringify(data, null, 2)}`;
-  pre.appendChild(code);
+  const list = document.createElement('ol');
+
+  const todoItems: string[] = Array.isArray(data) ? data : [];
+
+  for(const item of todoItems) {
+    const listItem = document.createElement('li');
+    listItem.textContent = item;
+    list.appendChild(listItem);
+  }
+
+  pre.appendChild(list);
   container.appendChild(pre);
 }
 
