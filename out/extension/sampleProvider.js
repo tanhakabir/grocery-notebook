@@ -62,36 +62,41 @@ class SampleKernelProvider {
 exports.SampleKernelProvider = SampleKernelProvider;
 class SampleKernel {
     constructor() {
+        this.id = 'sample-kernel';
         this.label = 'Sample Notebook Kernel';
         this.supportedLanguages = ['json'];
     }
-    executeCellsRequest(document, ranges) {
-        throw new Error('Method not implemented.');
+    async executeCellsRequest(document, ranges) {
+        for (let range of ranges) {
+            for (let i = range.start; i < range.end; i++) {
+                let cell = document.cells[i];
+                const execution = vscode.notebook.createNotebookCellExecutionTask(cell.notebook.uri, cell.index, this.id);
+                await this._doExecution(execution);
+            }
+        }
     }
-    cancelCellExecution() { }
-    cancelAllCellsExecution() { }
-    executeAllCells(doc) {
-        doc.cells.forEach((cell) => this.executeCell(doc, cell));
-    }
-    executeCell(_doc, cell) {
-        const edit = new vscode.WorkspaceEdit();
+    async _doExecution(execution) {
+        const doc = await vscode.workspace.openTextDocument(execution.cell.document.uri);
+        execution.start({ startTime: Date.now() });
+        const metadata = {
+            startTime: Date.now()
+        };
         try {
-            const output = [new vscode.NotebookCellOutput([
-                    new vscode.NotebookCellOutputItem('x-application/notebook-demo-todo-list', JSON.parse(cell.document.getText()))
-                ])];
-            edit.replaceNotebookCellOutput(cell.notebook.uri, cell.index, output);
+            execution.replaceOutput([new vscode.NotebookCellOutput([
+                    new vscode.NotebookCellOutputItem('x-application/notebook-demo-todo-list', JSON.parse(doc.getText())),
+                ], metadata)]);
+            execution.end({ success: true });
         }
         catch (e) {
-            const errorOutput = [new vscode.NotebookCellOutput([
+            execution.replaceOutput([new vscode.NotebookCellOutput([
                     new vscode.NotebookCellOutputItem('application/x.notebook.error-traceback', {
                         ename: e instanceof Error && e.name || 'error',
                         evalue: e instanceof Error && e.message || JSON.stringify(e, undefined, 4),
                         traceback: []
                     })
-                ])];
-            edit.replaceNotebookCellOutput(cell.notebook.uri, cell.index, errorOutput);
+                ])]);
+            execution.end({ success: false });
         }
-        return vscode.workspace.applyEdit(edit);
     }
 }
 exports.SampleKernel = SampleKernel;
