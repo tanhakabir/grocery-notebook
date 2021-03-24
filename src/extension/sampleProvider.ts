@@ -126,7 +126,7 @@ export class SampleKernelProvider implements vscode.NotebookKernelProvider {
 export class SampleKernel implements vscode.NotebookKernel {
   readonly id = 'sample-kernel';
   public readonly label = 'Sample Notebook Kernel';
-  readonly supportedLanguages = ['json'];
+  readonly supportedLanguages = ['todo-book'];
 
   private _executionOrder = 0;
 

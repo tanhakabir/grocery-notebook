@@ -1,0 +1,14 @@
+{
+    "scopeName": "source.todo-book",
+    "patterns":[
+        {
+            "include": "#constant"
+        }
+    ],
+    "repository": {
+        "constant": {
+            "name": "support.function",
+            "match": "\\b(ADD|DELETE|LIST)\\b"
+        }
+    }
+}

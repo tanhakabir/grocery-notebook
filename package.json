@@ -11,7 +11,8 @@
   ],
   "enableProposedApi": true,
   "activationEvents": [
-    "onNotebook:test-notebook-renderer"
+    "onNotebook:test-notebook-renderer",
+    "onLanguage:todo-book"
   ],
   "main": "./out/extension/extension.js",
   "contributes": {
@@ -33,6 +34,17 @@
           {
             "filenamePattern": "*.todobook"
           }
+        ]
+      }
+    ],
+    "languages": [
+      {
+        "id": "todo-book",
+        "aliases": [
+          "TODO Book"
+        ],
+        "filenamePatterns": [
+          "*.todo-book.txt"
         ]
       }
     ]

@@ -97,7 +97,7 @@ class SampleKernel {
     constructor() {
         this.id = 'sample-kernel';
         this.label = 'Sample Notebook Kernel';
-        this.supportedLanguages = ['json'];
+        this.supportedLanguages = ['todo-book'];
         this._executionOrder = 0;
     }
     async executeCellsRequest(document, ranges) {
