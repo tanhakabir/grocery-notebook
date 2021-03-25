@@ -81,7 +81,7 @@ export class SampleContentSerializer implements vscode.NotebookSerializer {
 
     contents.items = todoItems;
 
-    return new TextEncoder().encode(JSON.stringify(contents))
+    return new TextEncoder().encode(JSON.stringify(contents));
   }
 }
 
