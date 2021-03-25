@@ -1,53 +1,62 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.SampleKernel = exports.SampleKernelProvider = exports.SampleContentProvider = void 0;
+exports.SampleKernel = exports.SampleKernelProvider = exports.SampleContentSerializer = void 0;
 const vscode = require("vscode");
-/**
- * An ultra-minimal sample provider that lets the user type in JSON, and then
- * outputs JSON cells. Doesn't read files or save anything.
- */
-class SampleContentProvider {
+const util_1 = require("util");
+class SampleContentSerializer {
     constructor() {
-        this.label = 'My Sample Content Provider';
+        this.label = 'My Sample Content Serializer';
     }
     /**
      * @inheritdoc
      */
-    resolveNotebook() {
-        return Promise.resolve();
+    async dataToNotebook(data) {
+        var contents = new util_1.TextDecoder().decode(data);
+        let raw = { cells: [] };
+        try {
+            raw = JSON.parse(contents);
+        }
+        catch {
+            raw = { cells: [] };
+        }
+        if (raw.cells === undefined) {
+            raw.cells = [];
+        }
+        const cells = raw.cells.map(item => {
+            var _a;
+            return new vscode.NotebookCellData(item.kind, item.value, item.language, item.outputs ? [new vscode.NotebookCellOutput(item.outputs.map(raw => new vscode.NotebookCellOutputItem(raw.mime, raw.value)))] : [], new vscode.NotebookCellMetadata().with({ editable: (_a = item.editable) !== null && _a !== void 0 ? _a : true }));
+        });
+        return new vscode.NotebookData(cells, new vscode.NotebookDocumentMetadata().with({ cellHasExecutionOrder: true, }));
     }
     /**
      * @inheritdoc
      */
-    async backupNotebook() {
-        return { id: '', delete: () => undefined };
-    }
-    /**
-     * @inheritdoc
-     */
-    async openNotebook() {
-        return {
-            metadata: new vscode.NotebookDocumentMetadata().with({
-                editable: true,
-                cellEditable: true,
-            }),
-            cells: [new vscode.NotebookCellData(vscode.NotebookCellKind.Code, `{ "hello": "world!" }`, 'json', [])]
-        };
-    }
-    /**
-     * @inheritdoc
-     */
-    async saveNotebook() {
-        return Promise.resolve(); // not implemented
-    }
-    /**
-     * @inheritdoc
-     */
-    async saveNotebookAs() {
-        return Promise.resolve(); // not implemented
+    async notebookToData(data) {
+        var _a;
+        function asRawOutput(cell) {
+            var _a;
+            let result = [];
+            for (let output of (_a = cell.outputs) !== null && _a !== void 0 ? _a : []) {
+                for (let item of output.outputs) {
+                    result.push({ mime: item.mime, value: item.value });
+                }
+            }
+            return result;
+        }
+        let contents = { cells: [] };
+        for (const cell of data.cells) {
+            contents.cells.push({
+                kind: cell.kind,
+                language: cell.language,
+                value: cell.source,
+                editable: (_a = cell.metadata) === null || _a === void 0 ? void 0 : _a.editable,
+                outputs: asRawOutput(cell)
+            });
+        }
+        return new util_1.TextEncoder().encode(JSON.stringify(contents));
     }
 }
-exports.SampleContentProvider = SampleContentProvider;
+exports.SampleContentSerializer = SampleContentSerializer;
 class SampleKernelProvider {
     constructor() {
         this.label = 'My Sample Kernel Provider';
@@ -65,6 +74,7 @@ class SampleKernel {
         this.id = 'sample-kernel';
         this.label = 'Sample Notebook Kernel';
         this.supportedLanguages = ['json'];
+        this._executionOrder = 0;
     }
     async executeCellsRequest(document, ranges) {
         for (let range of ranges) {
@@ -77,21 +87,22 @@ class SampleKernel {
     }
     async _doExecution(execution) {
         const doc = await vscode.workspace.openTextDocument(execution.cell.document.uri);
+        execution.executionOrder = ++this._executionOrder;
         execution.start({ startTime: Date.now() });
         const metadata = {
             startTime: Date.now()
         };
         try {
             execution.replaceOutput([new vscode.NotebookCellOutput([
-                    new vscode.NotebookCellOutputItem('x-application/notebook-demo-todo-list', JSON.parse(doc.getText())),
+                    new vscode.NotebookCellOutputItem('application/json', JSON.parse(doc.getText())),
                 ], metadata)]);
             execution.end({ success: true });
         }
-        catch (e) {
+        catch (err) {
             execution.replaceOutput([new vscode.NotebookCellOutput([
                     new vscode.NotebookCellOutputItem('application/x.notebook.error-traceback', {
-                        ename: e instanceof Error && e.name || 'error',
-                        evalue: e instanceof Error && e.message || JSON.stringify(e, undefined, 4),
+                        ename: err instanceof Error && err.name || 'error',
+                        evalue: err instanceof Error && err.message || JSON.stringify(err, undefined, 4),
                         traceback: []
                     })
                 ])]);
