@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.SampleKernel = exports.SampleKernelProvider = exports.SampleContentProvider = void 0;
+exports.SampleKernel = exports.SampleKernelProvider = exports.SampleContentSerializer = void 0;
 const vscode = require("vscode");
 const util_1 = require("util");
 var todoItems = [];
@@ -8,28 +8,9 @@ var todoItems = [];
  * An ultra-minimal sample provider that lets the user type in JSON, and then
  * outputs JSON cells. Doesn't read files or save anything.
  */
-class SampleContentProvider {
-    constructor() {
-        this.label = 'My Sample Content Provider';
-    }
-    resolveNotebook() {
-        return Promise.resolve();
-    }
-    async backupNotebook(document, context, _cancellation) {
-        await this._save(document, context.destination);
-        return {
-            id: context.destination.toString(),
-            delete: () => vscode.workspace.fs.delete(context.destination)
-        };
-    }
-    async openNotebook(uri, context) {
-        let actualUri = context.backupId ? vscode.Uri.parse(context.backupId) : uri;
-        let contents = '';
-        try {
-            contents = new util_1.TextDecoder().decode(await vscode.workspace.fs.readFile(actualUri));
-        }
-        catch {
-        }
+class SampleContentSerializer {
+    async dataToNotebook(data) {
+        var contents = new util_1.TextDecoder().decode(data);
         let raw = { items: [], cells: [] };
         try {
             raw = JSON.parse(contents);
@@ -50,16 +31,12 @@ class SampleContentProvider {
         todoItems = raw.items;
         return new vscode.NotebookData(cells, new vscode.NotebookDocumentMetadata().with({ cellHasExecutionOrder: true, }));
     }
-    async saveNotebook(document, _cancellation) {
-        return this._save(document, document.uri);
-    }
-    async saveNotebookAs(targetResource, document, _cancellation) {
-        return this._save(document, targetResource);
-    }
-    async _save(document, targetResource) {
+    async notebookToData(data) {
+        var _a;
         function asRawOutput(cell) {
+            var _a;
             let result = [];
-            for (let output of cell.outputs) {
+            for (let output of (_a = cell.outputs) !== null && _a !== void 0 ? _a : []) {
                 for (let item of output.outputs) {
                     result.push({ mime: item.mime, value: item.value });
                 }
@@ -67,20 +44,20 @@ class SampleContentProvider {
             return result;
         }
         let contents = { items: [], cells: [] };
-        for (const cell of document.cells) {
+        for (const cell of data.cells) {
             contents.cells.push({
                 kind: cell.kind,
-                language: cell.document.languageId,
-                value: cell.document.getText(),
-                editable: cell.metadata.editable,
+                language: cell.language,
+                value: cell.source,
+                editable: (_a = cell.metadata) === null || _a === void 0 ? void 0 : _a.editable,
                 outputs: asRawOutput(cell)
             });
         }
         contents.items = todoItems;
-        await vscode.workspace.fs.writeFile(targetResource, Buffer.from(JSON.stringify(contents, undefined, 2)));
+        return new util_1.TextEncoder().encode(JSON.stringify(contents));
     }
 }
-exports.SampleContentProvider = SampleContentProvider;
+exports.SampleContentSerializer = SampleContentSerializer;
 class SampleKernelProvider {
     constructor() {
         this.label = 'My Sample Kernel Provider';

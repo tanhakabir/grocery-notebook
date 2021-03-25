@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { TextDecoder } from "util";
+import { TextDecoder, TextEncoder } from "util";
 
 interface RawNotebookData {
   items: string[],
@@ -25,28 +25,10 @@ var todoItems: string[] = [];
  * An ultra-minimal sample provider that lets the user type in JSON, and then
  * outputs JSON cells. Doesn't read files or save anything.
  */
-export class SampleContentProvider implements vscode.NotebookContentProvider {
-  public readonly label: string = 'My Sample Content Provider';
 
-  public resolveNotebook() {
-    return Promise.resolve();
-  }
-
-  public async backupNotebook(document: vscode.NotebookDocument, context: vscode.NotebookDocumentBackupContext, _cancellation: vscode.CancellationToken): Promise<vscode.NotebookDocumentBackup> {
-    await this._save(document, context.destination);
-    return {
-      id: context.destination.toString(),
-      delete: () => vscode.workspace.fs.delete(context.destination)
-    };
-  }
-
-  public async openNotebook(uri: vscode.Uri, context: vscode.NotebookDocumentOpenContext): Promise<vscode.NotebookData> {
-    let actualUri = context.backupId ? vscode.Uri.parse(context.backupId) : uri;
-    let contents = '';
-    try {
-      contents = new TextDecoder().decode(await vscode.workspace.fs.readFile(actualUri));
-    } catch {
-    }
+export class SampleContentSerializer implements vscode.NotebookSerializer {
+  public async dataToNotebook(data: Uint8Array): Promise<vscode.NotebookData> {
+    var contents = new TextDecoder().decode(data);
 
     let raw: RawNotebookData = { items: [], cells: [] };
     try {
@@ -74,18 +56,10 @@ export class SampleContentProvider implements vscode.NotebookContentProvider {
     );
   }
 
-  public async saveNotebook(document: vscode.NotebookDocument, _cancellation: vscode.CancellationToken): Promise<void> {
-    return this._save(document, document.uri);
-  }
-
-  public async saveNotebookAs(targetResource: vscode.Uri, document: vscode.NotebookDocument, _cancellation: vscode.CancellationToken): Promise<void> {
-    return this._save(document, targetResource);
-  }
-
-  async _save(document: vscode.NotebookDocument, targetResource: vscode.Uri): Promise<void> {
-    function asRawOutput(cell: vscode.NotebookCell): RawCellOutput[] {
+  public async notebookToData(data: vscode.NotebookData): Promise<Uint8Array> {
+    function asRawOutput(cell: vscode.NotebookCellData): RawCellOutput[] {
       let result: RawCellOutput[] = [];
-      for (let output of cell.outputs) {
+      for (let output of cell.outputs ?? []) {
         for (let item of output.outputs) {
           result.push({ mime: item.mime, value: item.value });
         }
@@ -95,19 +69,19 @@ export class SampleContentProvider implements vscode.NotebookContentProvider {
 
     let contents: RawNotebookData = {items: [], cells: []};
 
-    for (const cell of document.cells) {
+    for (const cell of data.cells) {
       contents.cells.push({
         kind: cell.kind,
-        language: cell.document.languageId,
-        value: cell.document.getText(),
-        editable: cell.metadata.editable,
+        language: cell.language,
+        value: cell.source,
+        editable: cell.metadata?.editable,
         outputs: asRawOutput(cell)
       });
     }
 
     contents.items = todoItems;
 
-    await vscode.workspace.fs.writeFile(targetResource, Buffer.from(JSON.stringify(contents, undefined, 2)));
+    return new TextEncoder().encode(JSON.stringify(contents))
   }
 }
 

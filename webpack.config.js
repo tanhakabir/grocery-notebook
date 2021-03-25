@@ -16,6 +16,7 @@ module.exports = (env, argv) => ({
   },
   resolve: {
     extensions: ['.ts', '.tsx', '.js', '.jsx', '.css'],
+    fallback: { "util": require.resolve("util/") }
   },
   module: {
     rules: [
