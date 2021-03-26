@@ -130,6 +130,7 @@ export class SampleKernel implements vscode.NotebookKernel {
 
       execution.replaceOutput([new vscode.NotebookCellOutput([
         new vscode.NotebookCellOutputItem('x-application/notebook-demo-todo-list', todoItems),
+        new vscode.NotebookCellOutputItem('application/json', todoItems)
       ], metadata)]);
 
       execution.end({ success: true });
