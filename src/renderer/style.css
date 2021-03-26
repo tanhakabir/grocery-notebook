@@ -1,5 +1,4 @@
-.json code {
-  font-family: monospace;
-  font-size: 12px;
-  color: lightblue;
+li {
+	font-size: 2em;
+	font-family: 'Brush Script MT', cursive;
 }

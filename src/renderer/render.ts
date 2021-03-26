@@ -9,27 +9,24 @@ import * as style from './style.css';
 import type { NotebookRendererApi } from 'vscode-notebook-renderer';
 
 interface IRenderInfo {
-  container: HTMLElement;
-  data: any;
-  notebookApi: NotebookRendererApi<unknown>;
+	container: HTMLElement;
+	data: any;
+	notebookApi: NotebookRendererApi<unknown>;
 }
 
 // This function is called to render your contents.
 export function render({ container, data }: IRenderInfo) {
-  // Format the JSON and insert it as <pre><code>{ ... }</code></pre>
-  // Replace this with your custom code!
-  const pre = document.createElement('pre');
-  pre.classList.add(style.json);
-  const code = document.createElement('code');
-  console.log(data);
-  code.textContent = JSON.stringify(data, null, 2);
-  pre.appendChild(code);
-  container.appendChild(pre);
+	const pre = document.createElement('pre');
+	pre.classList.add(style.json);
+
+	// do rendering for output here
+
+	container.appendChild(pre);
 }
 
 if (module.hot) {
-  module.hot.addDisposeHandler(() => {
-    // In development, this will be called before the renderer is reloaded. You
-    // can use this to clean up or stash any state.
-  });
+	module.hot.addDisposeHandler(() => {
+		// In development, this will be called before the renderer is reloaded. You
+		// can use this to clean up or stash any state.
+	});
 }

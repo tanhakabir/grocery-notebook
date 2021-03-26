@@ -27,17 +27,21 @@ class TodoNotebookExecutionKernel {
         }
     }
     async _doExecution(execution) {
-        const doc = await vscode.workspace.openTextDocument(execution.cell.document.uri); // find cell in document to get code from
+        const cell = await vscode.workspace.openTextDocument(execution.cell.document.uri); // find cell in notebook to get code from
+        // start a timer
         execution.executionOrder = ++this._executionOrder;
         execution.start({ startTime: Date.now() });
         const metadata = {
             startTime: Date.now()
         };
+        // do the work
         try {
+            // this is where we'd do our "compiling" before outputting results
+            const outputData = JSON.parse(cell.getText());
             // update the outputs of the cell with options for a simple JSON output or a stylized JSON output
             execution.replaceOutput([new vscode.NotebookCellOutput([
-                    new vscode.NotebookCellOutputItem('application/json', JSON.parse(doc.getText())),
-                    new vscode.NotebookCellOutputItem('x-application/todo-notebook', JSON.parse(doc.getText()))
+                    // new vscode.NotebookCellOutputItem('x-application/todo-notebook', todoItems),
+                    new vscode.NotebookCellOutputItem('application/json', outputData),
                 ], metadata)]);
             execution.end({ success: true });
         }
