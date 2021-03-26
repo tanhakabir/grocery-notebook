@@ -22,7 +22,7 @@ export function render({ container, data }: IRenderInfo) {
   pre.classList.add(style.json);
   const code = document.createElement('code');
   console.log(data);
-  code.textContent = `${JSON.stringify(data, null, 2)}`;
+  code.textContent = JSON.stringify(data, null, 2);
   pre.appendChild(code);
   container.appendChild(pre);
 }
