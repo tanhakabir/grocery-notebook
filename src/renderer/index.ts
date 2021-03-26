@@ -20,7 +20,7 @@ __webpack_public_path__ = new URL(scriptUrl.replace(/[^/]+$/, '') + __webpack_re
 // rendering logic inside of the `render()` function.
 // ----------------------------------------------------------------------------
 
-const notebookApi = acquireNotebookRendererApi("notebook-demo-todo-list");
+const notebookApi = acquireNotebookRendererApi("todo-notebook");
 
 // Track cells that we render so that, in development, we can re-render then
 // when the scripts change.
@@ -49,7 +49,8 @@ const renderTag = ({ element, mime, value }: NotebookOutputEventParams) =>
     const node = document.createElement('div');
     element.appendChild(node);
 
-    render({ container: node, mimeType: mime, data: value, notebookApi });
+    console.log(value);
+    render({ container: node, data: value, notebookApi });
   });
 
 function renderAllTags() {

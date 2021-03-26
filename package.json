@@ -11,24 +11,24 @@
   ],
   "enableProposedApi": true,
   "activationEvents": [
-    "onNotebook:test-notebook-renderer"
+    "onNotebook:todo-notebook"
   ],
   "main": "./out/extension/extension.js",
   "contributes": {
     "notebookOutputRenderer": [
       {
-        "id": "notebook-demo-todo-list",
-        "entrypoint": "./out/client/index.js",
+        "id": "todo-notebook",
+        "entrypoint": "./out/renderer/index.js",
         "displayName": "Notebook Demo TODO List",
         "mimeTypes": [
-          "x-application/notebook-demo-todo-list"
+          "x-application/todo-notebook"
         ]
       }
     ],
     "notebookProvider": [
       {
-        "viewType": "test-notebook-renderer",
-        "displayName": "Test Notebook Renderer",
+        "viewType": "todo-notebook",
+        "displayName": "Todo Notebook",
         "selector": [
           {
             "filenamePattern": "*.todobook"

@@ -1,0 +1,58 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.TodoNotebookExecutionKernel = exports.TodoNotebookKernelProvider = void 0;
+const vscode = require("vscode");
+class TodoNotebookKernelProvider {
+    provideKernels() {
+        return [new TodoNotebookExecutionKernel()];
+    }
+}
+exports.TodoNotebookKernelProvider = TodoNotebookKernelProvider;
+class TodoNotebookExecutionKernel {
+    constructor() {
+        this.id = 'todo-notebook-kernel';
+        this.label = 'Todo Notebook Kernel';
+        this.supportedLanguages = ['json'];
+        this._executionOrder = 0;
+    }
+    async executeCellsRequest(document, ranges) {
+        // find the cells that are being asked to run
+        for (let range of ranges) {
+            for (let i = range.start; i < range.end; i++) {
+                let cell = document.cells[i];
+                // create an execution task that handles events like cancellation and perform actions from completing the run execution
+                const execution = vscode.notebook.createNotebookCellExecutionTask(cell.notebook.uri, cell.index, this.id);
+                await this._doExecution(execution);
+            }
+        }
+    }
+    async _doExecution(execution) {
+        const doc = await vscode.workspace.openTextDocument(execution.cell.document.uri); // find cell in document to get code from
+        execution.executionOrder = ++this._executionOrder;
+        execution.start({ startTime: Date.now() });
+        const metadata = {
+            startTime: Date.now()
+        };
+        try {
+            // update the outputs of the cell with options for a simple JSON output or a stylized JSON output
+            execution.replaceOutput([new vscode.NotebookCellOutput([
+                    new vscode.NotebookCellOutputItem('application/json', JSON.parse(doc.getText())),
+                    new vscode.NotebookCellOutputItem('x-application/todo-notebook', JSON.parse(doc.getText()))
+                ], metadata)]);
+            execution.end({ success: true });
+        }
+        catch (err) {
+            // something went wrong and we need to update the output of the cell to be showing an error
+            execution.replaceOutput([new vscode.NotebookCellOutput([
+                    new vscode.NotebookCellOutputItem('application/x.notebook.error-traceback', {
+                        ename: err instanceof Error && err.name || 'error',
+                        evalue: err instanceof Error && err.message || JSON.stringify(err, undefined, 4),
+                        traceback: []
+                    })
+                ])]);
+            execution.end({ success: false });
+        }
+    }
+}
+exports.TodoNotebookExecutionKernel = TodoNotebookExecutionKernel;
+//# sourceMappingURL=notebookExecutionKernel.js.map
