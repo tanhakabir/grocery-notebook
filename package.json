@@ -35,6 +35,17 @@
           }
         ]
       }
+    ],
+    "languages": [
+      {
+        "id": "todo-book",
+        "aliases": [
+          "TODO Book"
+        ],
+        "filenamePatterns": [
+          "*.todo-book.txt"
+        ]
+      }
     ]
   },
   "scripts": {

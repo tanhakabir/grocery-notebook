@@ -4,6 +4,9 @@ import * as vscode from 'vscode';
 
 import { TodoNotebookContentSerializer } from './notebookContentSerializer';
 import { TodoNotebookKernelProvider } from './notebookExecutionKernel';
+import { TodoNotebookCompletionProvider } from './todoLanguageProvider';
+
+export var todoItems: string[] = [];
 
 // This method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -16,7 +19,10 @@ export function activate(context: vscode.ExtensionContext) {
 		vscode.notebook.registerNotebookKernelProvider(
 			{ viewType: 'todo-notebook' },
 			new TodoNotebookKernelProvider(),
-		),
+		), 
+		
+		// register our Todo language
+		vscode.languages.registerCompletionItemProvider({ language: 'todo-book' }, new TodoNotebookCompletionProvider())
 	);
 
 }

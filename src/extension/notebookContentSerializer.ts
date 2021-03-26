@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import { TextDecoder, TextEncoder } from "util";
+import { todoItems } from './extension';
 
 
 // Interfaces for the data we're saving to the Notebook file
