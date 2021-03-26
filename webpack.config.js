@@ -8,9 +8,9 @@ const devServerPort = 8111;
 module.exports = (env, argv) => ({
   mode: argv.mode,
   devtool: argv.mode === 'production' ? false : 'inline-source-map',
-  entry: './src/client/index.ts',
+  entry: './src/renderer/index.ts',
   output: {
-    path: path.join(__dirname, 'out', 'client'),
+    path: path.join(__dirname, 'out', 'renderer'),
     filename: outputFilename,
     publicPath: process.env.WEBPACK_DEV_SERVER ? `http://localhost:${devServerPort}/` : undefined,
   },
@@ -24,7 +24,7 @@ module.exports = (env, argv) => ({
         test: /\.tsx?$/,
         loader: 'ts-loader',
         options: {
-          configFile: 'src/client/tsconfig.json',
+          configFile: 'src/renderer/tsconfig.json',
           // transpileOnly enables hot-module-replacement
           transpileOnly: true,
           compilerOptions: {
@@ -61,7 +61,7 @@ module.exports = (env, argv) => ({
   plugins: [
     new ForkTsCheckerWebpackPlugin({
       typescript: {
-        tsconfig: 'src/client/tsconfig.json',
+        tsconfig: 'src/renderer/tsconfig.json',
       },
     }),
     new DefinePlugin({
