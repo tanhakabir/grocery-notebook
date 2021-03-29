@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { TextDecoder, TextEncoder } from "util";
-import { groceryList } from './extension';
+import { groceryList, setGroceryList } from './extension';
 
 
 // Interfaces for the data we're saving to the Notebook file

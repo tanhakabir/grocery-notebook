@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { groceryList } from './extension';
+import { groceryList, addToGroceryList, removeFromGroceryList } from './extension';
 
 export class GroceryListNotebookKernelProvider implements vscode.NotebookKernelProvider {
 	provideKernels(): vscode.ProviderResult<vscode.NotebookKernel[]> {
