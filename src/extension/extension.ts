@@ -2,11 +2,11 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 
-import { TodoNotebookContentSerializer } from './notebookContentSerializer';
-import { TodoNotebookKernelProvider } from './notebookExecutionKernel';
-import { TodoNotebookCompletionProvider } from './todoLanguageProvider';
+import { GroceryListNotebookContentSerializer } from './notebookContentSerializer';
+import { GroceryListNotebookKernelProvider } from './notebookExecutionKernel';
+import { GroceryNotebookCompletionProvider } from './languageCompletionProvider';
 
-export var todoItems: string[] = [];
+export var groceryList: string[] = [];
 
 // This method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -14,18 +14,23 @@ export function activate(context: vscode.ExtensionContext) {
 
 	context.subscriptions.push(
 		vscode.notebook.registerNotebookSerializer(
-			'todo-notebook', new TodoNotebookContentSerializer()
+			'grocery-list-notebook', new GroceryListNotebookContentSerializer()
 		),
 		vscode.notebook.registerNotebookKernelProvider(
-			{ viewType: 'todo-notebook' },
-			new TodoNotebookKernelProvider(),
+			{ viewType: 'grocery-list-notebook' },
+			new GroceryListNotebookKernelProvider(),
 		), 
 		
 		// register our Todo language
-		vscode.languages.registerCompletionItemProvider({ language: 'todo-book' }, new TodoNotebookCompletionProvider())
+		vscode.languages.registerCompletionItemProvider({ language: 'grocery-list' }, new GroceryNotebookCompletionProvider())
 	);
 
 }
 
 // This method is called when your extension is deactivated
 export function deactivate() { }
+
+
+export function setGroceryList(list: string[]) {
+	groceryList = list;
+}

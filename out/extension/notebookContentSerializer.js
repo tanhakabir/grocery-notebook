@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.TodoNotebookContentSerializer = void 0;
+exports.GroceryListNotebookContentSerializer = void 0;
 const vscode = require("vscode");
 const util_1 = require("util");
-class TodoNotebookContentSerializer {
+class GroceryListNotebookContentSerializer {
     // contents from file to VS Code Notebook data
     async dataToNotebook(data) {
         var contents = new util_1.TextDecoder().decode(data); // convert to String to make JSON object
@@ -50,5 +50,5 @@ class TodoNotebookContentSerializer {
         return new util_1.TextEncoder().encode(JSON.stringify(contents));
     }
 }
-exports.TodoNotebookContentSerializer = TodoNotebookContentSerializer;
+exports.GroceryListNotebookContentSerializer = GroceryListNotebookContentSerializer;
 //# sourceMappingURL=notebookContentSerializer.js.map

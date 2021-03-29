@@ -11,39 +11,39 @@
   ],
   "enableProposedApi": true,
   "activationEvents": [
-    "onNotebook:todo-notebook"
+    "onNotebook:grocery-list-notebook"
   ],
   "main": "./out/extension/extension.js",
   "contributes": {
     "notebookOutputRenderer": [
       {
-        "id": "todo-notebook",
+        "id": "grocery-list-notebook",
         "entrypoint": "./out/renderer/index.js",
-        "displayName": "Notebook Demo TODO List",
+        "displayName": "Grocery List Notebook",
         "mimeTypes": [
-          "x-application/todo-notebook"
+          "x-application/grocery-list-notebook"
         ]
       }
     ],
     "notebookProvider": [
       {
-        "viewType": "todo-notebook",
-        "displayName": "Todo Notebook",
+        "viewType": "grocery-list-notebook",
+        "displayName": "Grocery List Notebook",
         "selector": [
           {
-            "filenamePattern": "*.todobook"
+            "filenamePattern": "*.grocerybook"
           }
         ]
       }
     ],
     "languages": [
       {
-        "id": "todo-book",
+        "id": "grocery-list",
         "aliases": [
-          "TODO Book"
+          "Grocery List"
         ],
         "filenamePatterns": [
-          "*.todo-book.txt"
+          "*.grocery-list.txt"
         ]
       }
     ]

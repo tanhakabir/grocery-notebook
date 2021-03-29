@@ -1,15 +1,15 @@
 import * as vscode from 'vscode';
-import { todoItems } from './extension';
+import { groceryList } from './extension';
 
-export class TodoNotebookKernelProvider implements vscode.NotebookKernelProvider {
+export class GroceryListNotebookKernelProvider implements vscode.NotebookKernelProvider {
 	provideKernels(): vscode.ProviderResult<vscode.NotebookKernel[]> {
-		return [new TodoNotebookExecutionKernel()];
+		return [new GroceryListNotebookExecutionKernel()];
 	}
 }
 
-export class TodoNotebookExecutionKernel implements vscode.NotebookKernel {
-	readonly id = 'todo-notebook-kernel';
-	public readonly label = 'Todo Notebook Kernel';
+export class GroceryListNotebookExecutionKernel implements vscode.NotebookKernel {
+	readonly id = 'grocery-list-notebook-kernel';
+	public readonly label = 'Grocery List Notebook Kernel';
 	readonly supportedLanguages = ['json'];
 
 	private _executionOrder = 0;
@@ -45,7 +45,7 @@ export class TodoNotebookExecutionKernel implements vscode.NotebookKernel {
 
             // update the outputs of the cell with options for a simple JSON output or a stylized JSON output
 			execution.replaceOutput([new vscode.NotebookCellOutput([
-				// new vscode.NotebookCellOutputItem('x-application/todo-notebook', todoItems),
+				// new vscode.NotebookCellOutputItem('x-application/grocery-list-notebook', groceryList),
 				new vscode.NotebookCellOutputItem('application/json', outputData),
 			], metadata)]);
 

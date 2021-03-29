@@ -1,17 +1,17 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.TodoNotebookExecutionKernel = exports.TodoNotebookKernelProvider = void 0;
+exports.GroceryListNotebookExecutionKernel = exports.GroceryListNotebookKernelProvider = void 0;
 const vscode = require("vscode");
-class TodoNotebookKernelProvider {
+class GroceryListNotebookKernelProvider {
     provideKernels() {
-        return [new TodoNotebookExecutionKernel()];
+        return [new GroceryListNotebookExecutionKernel()];
     }
 }
-exports.TodoNotebookKernelProvider = TodoNotebookKernelProvider;
-class TodoNotebookExecutionKernel {
+exports.GroceryListNotebookKernelProvider = GroceryListNotebookKernelProvider;
+class GroceryListNotebookExecutionKernel {
     constructor() {
-        this.id = 'todo-notebook-kernel';
-        this.label = 'Todo Notebook Kernel';
+        this.id = 'grocery-list-notebook-kernel';
+        this.label = 'Grocery List Notebook Kernel';
         this.supportedLanguages = ['json'];
         this._executionOrder = 0;
     }
@@ -40,7 +40,7 @@ class TodoNotebookExecutionKernel {
             const outputData = JSON.parse(cell.getText());
             // update the outputs of the cell with options for a simple JSON output or a stylized JSON output
             execution.replaceOutput([new vscode.NotebookCellOutput([
-                    // new vscode.NotebookCellOutputItem('x-application/todo-notebook', todoItems),
+                    // new vscode.NotebookCellOutputItem('x-application/grocery-list-notebook', groceryList),
                     new vscode.NotebookCellOutputItem('application/json', outputData),
                 ], metadata)]);
             execution.end({ success: true });
@@ -58,5 +58,5 @@ class TodoNotebookExecutionKernel {
         }
     }
 }
-exports.TodoNotebookExecutionKernel = TodoNotebookExecutionKernel;
+exports.GroceryListNotebookExecutionKernel = GroceryListNotebookExecutionKernel;
 //# sourceMappingURL=notebookExecutionKernel.js.map
