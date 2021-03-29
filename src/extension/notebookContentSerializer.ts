@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { TextDecoder, TextEncoder } from "util";
-import { todoItems } from './extension';
+import { groceryList } from './extension';
 
 
 // Interfaces for the data we're saving to the Notebook file
@@ -21,7 +21,7 @@ interface RawCellOutput {
 	value: any;                     //  data for output
 }
 
-export class TodoNotebookContentSerializer implements vscode.NotebookSerializer {
+export class GroceryListNotebookContentSerializer implements vscode.NotebookSerializer {
 
     // contents from file to VS Code Notebook data
 	public async dataToNotebook(data: Uint8Array): Promise<vscode.NotebookData> {

@@ -29,4 +29,4 @@ class GroceryNotebookCompletionProvider {
     }
 }
 exports.GroceryNotebookCompletionProvider = GroceryNotebookCompletionProvider;
-//# sourceMappingURL=todoLanguageProvider.js.map
+//# sourceMappingURL=languageCompletionProvider.js.map
