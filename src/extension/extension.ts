@@ -6,7 +6,7 @@ import { GroceryListNotebookContentSerializer } from './notebookContentSerialize
 import { GroceryListNotebookKernelProvider } from './notebookExecutionKernel';
 import { GroceryNotebookCompletionProvider } from './languageCompletionProvider';
 
-export var groceryList: string[] = [];
+export var groceryList: string[] = [];  // list of grocery items 
 
 // This method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -31,6 +31,17 @@ export function activate(context: vscode.ExtensionContext) {
 export function deactivate() { }
 
 
+
+// functions to edit the grocery list
+
 export function setGroceryList(list: string[]) {
 	groceryList = list;
+}
+
+export function addToGroceryList(item: string) {
+	groceryList.push(item);
+}
+
+export function removeFromGroceryList(index: number) {
+	groceryList.splice(index - 1, 1);
 }
