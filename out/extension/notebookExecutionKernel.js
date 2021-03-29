@@ -41,8 +41,8 @@ class GroceryListNotebookExecutionKernel {
             this._processCell(cell.getText());
             // update the outputs of the cell with options for a simple JSON output or a stylized JSON output
             execution.replaceOutput([new vscode.NotebookCellOutput([
-                    new vscode.NotebookCellOutputItem('x-application/grocery-list-notebook', extension_1.groceryList),
                     new vscode.NotebookCellOutputItem('application/json', extension_1.groceryList),
+                    new vscode.NotebookCellOutputItem('x-application/grocery-list-notebook', extension_1.groceryList),
                 ], metadata)]);
             execution.end({ success: true });
         }
