@@ -10,7 +10,7 @@ export class GroceryListNotebookKernelProvider implements vscode.NotebookKernelP
 export class GroceryListNotebookExecutionKernel implements vscode.NotebookKernel {
 	readonly id = 'grocery-list-notebook-kernel';
 	public readonly label = 'Grocery List Notebook Kernel';
-	readonly supportedLanguages = ['json'];
+	readonly supportedLanguages = ['grocery-list'];
 
 	private _executionOrder = 0;
 
@@ -41,12 +41,12 @@ export class GroceryListNotebookExecutionKernel implements vscode.NotebookKernel
 		// do the work
 		try {
 			// this is where we'd do our "compiling" before outputting results
-			const outputData = JSON.parse(cell.getText());
+			this._processCell(cell.getText());
 
             // update the outputs of the cell with options for a simple JSON output or a stylized JSON output
 			execution.replaceOutput([new vscode.NotebookCellOutput([
-				// new vscode.NotebookCellOutputItem('x-application/grocery-list-notebook', groceryList),
-				new vscode.NotebookCellOutputItem('application/json', outputData),
+				new vscode.NotebookCellOutputItem('x-application/grocery-list-notebook', groceryList),
+				new vscode.NotebookCellOutputItem('application/json', groceryList),
 			], metadata)]);
 
 			execution.end({ success: true });
@@ -61,6 +61,31 @@ export class GroceryListNotebookExecutionKernel implements vscode.NotebookKernel
 				})
 			])]);
 			execution.end({ success: false });
+		}
+	}
+
+	// my "compiler"
+	private _processCell(text: string) {
+		// my language consists of the action followed by a space and then the parameter
+
+		// example input:
+		// BUY milk
+		// REMOVE 2
+		// LIST
+	
+		switch (text.substring(0, text.indexOf(' '))) {
+			case 'BUY':
+				addToGroceryList(text.substring(text.indexOf(' ') + 1));
+				break;
+		  	case 'REMOVE':
+				const index = parseInt(text.substring(text.indexOf(' ') + 1));
+				if(index === NaN) { throw new Error('Cannot remove item from grocery list at index that does not exist!'); }
+				removeFromGroceryList(index);
+				break;
+		  	case 'LIST':
+				break;
+		  	default:
+				throw new Error('Unexpected action! Please use BUY, REMOVE, or LIST');
 		}
 	}
 }

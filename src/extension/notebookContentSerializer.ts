@@ -6,6 +6,7 @@ import { groceryList, setGroceryList } from './extension';
 // Interfaces for the data we're saving to the Notebook file
 
 interface RawNotebookData {
+	groceryList: string[],
 	cells: RawNotebookCell[]
 }
 
@@ -29,16 +30,18 @@ export class GroceryListNotebookContentSerializer implements vscode.NotebookSeri
 
         // Read file contents
 
-		let raw: RawNotebookData = { cells: [] };
+		let raw: RawNotebookData = { groceryList: [], cells: [] };
 		try {
 			raw = <RawNotebookData>JSON.parse(contents);
 		} catch {
-			raw = { cells: [] };
+			raw = { groceryList: [], cells: [] };
 		}
 
 		if (raw.cells === undefined) {
 			raw.cells = [];
 		}
+
+		setGroceryList(raw.groceryList);
 
         // Create array of Notebook cells for the VS Code API from file contents
 		const cells = raw.cells.map(item => new vscode.NotebookCellData(
@@ -72,7 +75,9 @@ export class GroceryListNotebookContentSerializer implements vscode.NotebookSeri
 
         // Map the Notebook data into the format we want to save the Notebook data as
 
-		let contents: RawNotebookData = { cells: [] };
+		let contents: RawNotebookData = { groceryList: [], cells: [] };
+
+		contents.groceryList = groceryList;
 
 		for (const cell of data.cells) {
 			contents.cells.push({

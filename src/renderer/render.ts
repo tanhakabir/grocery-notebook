@@ -20,6 +20,18 @@ export function render({ container, data }: IRenderInfo) {
 	pre.classList.add(style.json);
 
 	// do rendering for output here
+	const list = document.createElement('ol');
+
+	const groceryList: string[] = Array.isArray(data) ? data : [];
+
+	for(const item of groceryList) {
+		const listItem = document.createElement('li');
+		listItem.textContent = item;
+		list.appendChild(listItem);
+	}
+
+	pre.appendChild(list);
+
 
 	container.appendChild(pre);
 }

@@ -1,4 +1,49 @@
-li {
-	font-size: 2em;
-	font-family: 'Brush Script MT', cursive;
-}
+ol {
+	font-family: Georgia, 'Times New Roman', Times, serif;
+	counter-reset: index;  
+	padding: 0;
+	padding-left: 50px;
+  }
+  
+  /* List element */
+  li {
+	counter-increment: index; 
+	display: flex;
+	align-items: center;
+	padding: 12px 0;
+	box-sizing: border-box;
+	font-size: 1em;
+  }
+
+  li:hover {
+	cursor: pointer;
+	transform: scale(1.01);
+  }
+  
+  
+  /* Element counter */
+  li::before {
+	content: counters(index, ".", decimal-leading-zero);
+	font-size: 1.5rem;
+	text-align: right;
+	font-weight: bold;
+	min-width: 50px;
+	padding-right: 12px;
+	font-variant-numeric: tabular-nums;
+	align-self: flex-start;
+	background-image: linear-gradient(to bottom, aquamarine, cornflowerblue);
+	background-attachment: fixed;
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+  }
+
+  li:hover::before {
+	background-image: linear-gradient(to bottom, coral, orangered);
+  }
+  
+  
+  /* Element separation */
+  li + li {
+	border-top: 1px solid rgba(255,255,255,0.2);
+  }
+  
