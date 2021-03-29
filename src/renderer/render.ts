@@ -23,10 +23,3 @@ export function render({ container, data }: IRenderInfo) {
 
 	container.appendChild(pre);
 }
-
-if (module.hot) {
-	module.hot.addDisposeHandler(() => {
-		// In development, this will be called before the renderer is reloaded. You
-		// can use this to clean up or stash any state.
-	});
-}
