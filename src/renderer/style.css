@@ -1,28 +1,28 @@
 ol {
 	font-family: Georgia, 'Times New Roman', Times, serif;
-	counter-reset: index;
+	counter-reset: index;  
 	padding: 0;
 	padding-left: 50px;
+	overflow: hidden;
 }
-
-/* List element */
+  
 
 li {
-	counter-increment: index;
+	counter-increment: index; 
 	display: flex;
 	align-items: center;
 	padding: 12px 0;
 	box-sizing: border-box;
-	font-size: 1em;
+	font-size: 1.5em;
 }
 
 li:hover {
 	cursor: pointer;
-	transform: scale(1.01);
+	font-size: 1.55em;
 }
-
+  
+  
 /* Element counter */
-
 li::before {
 	content: counters(index, ".", decimal-leading-zero);
 	font-size: 1.5rem;
@@ -32,18 +32,10 @@ li::before {
 	padding-right: 12px;
 	font-variant-numeric: tabular-nums;
 	align-self: flex-start;
-	background-image: linear-gradient(to bottom, aquamarine, cornflowerblue);
-	background-attachment: fixed;
-	-webkit-background-clip: text;
-	-webkit-text-fill-color: transparent;
+	color: cornflowerblue;
 }
 
 li:hover::before {
-	background-image: linear-gradient(to bottom, coral, orangered);
-}
-
-/* Element separation */
-
-li+li {
-	border-top: 1px solid rgba(255, 255, 255, 0.2);
+	color: orangered;
+	font-size: 1.55em;
 }
