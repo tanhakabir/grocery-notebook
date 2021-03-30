@@ -29,7 +29,7 @@ export class GroceryListNotebookContentSerializer implements vscode.NotebookSeri
 
         // Read file contents
 
-		let raw: RawNotebookData = { cells: [] };
+		let raw: RawNotebookData;
 		try {
 			raw = <RawNotebookData>JSON.parse(contents);
 		} catch {
