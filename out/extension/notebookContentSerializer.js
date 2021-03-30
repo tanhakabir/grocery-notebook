@@ -15,9 +15,6 @@ class GroceryListNotebookContentSerializer {
         catch {
             raw = { cells: [] };
         }
-        if (raw.cells === undefined) { // TODO remove
-            raw.cells = [];
-        }
         // Create array of Notebook cells for the VS Code API from file contents
         const cells = raw.cells.map(item => new vscode.NotebookCellData(item.kind, item.value, item.language, item.outputs ? [new vscode.NotebookCellOutput(item.outputs.map(raw => new vscode.NotebookCellOutputItem(raw.mime, raw.value)))] : [], new vscode.NotebookCellMetadata()));
         // Pass read and formatted Notebook Data to VS Code to display Notebook with saved cells

@@ -36,10 +36,6 @@ export class GroceryListNotebookContentSerializer implements vscode.NotebookSeri
 			raw = { cells: [] };
 		}
 
-		if (raw.cells === undefined) { // TODO remove
-			raw.cells = [];
-		}
-
         // Create array of Notebook cells for the VS Code API from file contents
 		const cells = raw.cells.map(item => new vscode.NotebookCellData(
 			item.kind,
