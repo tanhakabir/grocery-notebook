@@ -3,6 +3,7 @@ ol {
 	counter-reset: index;  
 	padding: 0;
 	padding-left: 50px;
+	overflow: hidden;
   }
   
   /* List element */
@@ -12,12 +13,13 @@ ol {
 	align-items: center;
 	padding: 12px 0;
 	box-sizing: border-box;
-	font-size: 1em;
+	font-size: 1.5em;
   }
 
   li:hover {
 	cursor: pointer;
 	transform: scale(1.01);
+	transform: translateX(-0.99);
   }
   
   
@@ -31,14 +33,11 @@ ol {
 	padding-right: 12px;
 	font-variant-numeric: tabular-nums;
 	align-self: flex-start;
-	background-image: linear-gradient(to bottom, aquamarine, cornflowerblue);
-	background-attachment: fixed;
-	-webkit-background-clip: text;
-	-webkit-text-fill-color: transparent;
+	color: cornflowerblue;
   }
 
   li:hover::before {
-	background-image: linear-gradient(to bottom, coral, orangered);
+	color: orangered;
   }
   
   
