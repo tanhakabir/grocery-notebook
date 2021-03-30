@@ -18,8 +18,7 @@ ol {
 
   li:hover {
 	cursor: pointer;
-	transform: scale(1.01);
-	transform: translateX(-0.99);
+	font-size: 1.55em;
   }
   
   
@@ -38,11 +37,7 @@ ol {
 
   li:hover::before {
 	color: orangered;
+	font-size: 1.55em;
   }
-  
-  
-  /* Element separation */
-  li + li {
-	border-top: 1px solid rgba(255,255,255,0.2);
-  }
+
   
