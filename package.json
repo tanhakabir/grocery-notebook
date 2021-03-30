@@ -15,16 +15,6 @@
   ],
   "main": "./out/extension/extension.js",
   "contributes": {
-    "notebookOutputRenderer": [
-      {
-        "id": "grocery-list-notebook",
-        "entrypoint": "./out/renderer/index.js",
-        "displayName": "Grocery List Notebook",
-        "mimeTypes": [
-          "x-application/grocery-list-notebook"
-        ]
-      }
-    ],
     "notebookProvider": [
       {
         "viewType": "grocery-list-notebook",
@@ -33,6 +23,16 @@
           {
             "filenamePattern": "*.grocerybook"
           }
+        ]
+      }
+    ],
+    "notebookOutputRenderer": [
+      {
+        "id": "grocery-list-notebook",
+        "entrypoint": "./out/renderer/index.js",
+        "displayName": "Grocery List Notebook",
+        "mimeTypes": [
+          "x-application/grocery-list-notebook"
         ]
       }
     ],
