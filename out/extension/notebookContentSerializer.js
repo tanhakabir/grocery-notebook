@@ -7,15 +7,15 @@ class GroceryListNotebookContentSerializer {
     // contents from file to VS Code Notebook data
     async dataToNotebook(data) {
         var contents = new util_1.TextDecoder().decode(data); // convert to String to make JSON object
-        // Read file contents
         let raw;
+        // Read file contents
         try {
             raw = JSON.parse(contents);
         }
         catch {
             raw = { cells: [] };
         }
-        if (raw.cells === undefined) {
+        if (raw.cells === undefined) { // TODO remove
             raw.cells = [];
         }
         // Create array of Notebook cells for the VS Code API from file contents
