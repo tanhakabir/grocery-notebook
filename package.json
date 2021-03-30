@@ -41,9 +41,6 @@
         "id": "grocery-list",
         "aliases": [
           "Grocery List"
-        ],
-        "filenamePatterns": [
-          "*.grocery-list.txt"
         ]
       }
     ]

@@ -8,7 +8,7 @@ class GroceryListNotebookContentSerializer {
     async dataToNotebook(data) {
         var contents = new util_1.TextDecoder().decode(data); // convert to String to make JSON object
         // Read file contents
-        let raw = { cells: [] };
+        let raw;
         try {
             raw = JSON.parse(contents);
         }
