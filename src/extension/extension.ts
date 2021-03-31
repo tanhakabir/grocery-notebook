@@ -21,7 +21,7 @@ export function activate(context: vscode.ExtensionContext) {
 			new GroceryListNotebookKernelProvider(),
 		), 
 		
-		// register our Todo language
+		// register our Grocery List language
 		vscode.languages.registerCompletionItemProvider({ language: 'grocery-list' }, new GroceryNotebookCompletionProvider())
 	);
 

@@ -12,7 +12,7 @@ exports.groceryList = []; // list of grocery items
 // your extension is activated the very first time the command is executed
 function activate(context) {
     context.subscriptions.push(vscode.notebook.registerNotebookSerializer('grocery-list-notebook', new notebookContentSerializer_1.GroceryListNotebookContentSerializer()), vscode.notebook.registerNotebookKernelProvider({ viewType: 'grocery-list-notebook' }, new notebookExecutionKernel_1.GroceryListNotebookKernelProvider()), 
-    // register our Todo language
+    // register our Grocery List language
     vscode.languages.registerCompletionItemProvider({ language: 'grocery-list' }, new languageCompletionProvider_1.GroceryNotebookCompletionProvider()));
 }
 exports.activate = activate;
