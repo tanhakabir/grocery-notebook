@@ -32,6 +32,9 @@ function addToGroceryList(item) {
 }
 exports.addToGroceryList = addToGroceryList;
 function removeFromGroceryList(index) {
+    if (index < 0 || index > exports.groceryList.length) {
+        throw new Error('Cannot remove item from grocery list with out of bounds index!');
+    }
     exports.groceryList.splice(index - 1, 1);
 }
 exports.removeFromGroceryList = removeFromGroceryList;

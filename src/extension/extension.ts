@@ -44,5 +44,8 @@ export function addToGroceryList(item: string) {
 }
 
 export function removeFromGroceryList(index: number) {
+	if (index < 0 || index > groceryList.length) {
+		throw new Error('Cannot remove item from grocery list with out of bounds index!');
+	}
 	groceryList.splice(index - 1, 1);
 }
