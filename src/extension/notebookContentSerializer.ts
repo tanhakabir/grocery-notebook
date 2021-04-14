@@ -48,7 +48,7 @@ export class GroceryListNotebookContentSerializer implements vscode.NotebookSeri
         // Pass read and formatted Notebook Data to VS Code to display Notebook with saved cells
 		return new vscode.NotebookData(
 			cells,
-			new vscode.NotebookDocumentMetadata().with({ cellHasExecutionOrder: true, })
+			new vscode.NotebookDocumentMetadata()
 		);
 	}
 

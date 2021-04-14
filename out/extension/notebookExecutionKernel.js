@@ -18,8 +18,7 @@ class GroceryListNotebookExecutionKernel {
     async executeCellsRequest(document, ranges) {
         // find the cells that are being asked to run
         for (let range of ranges) {
-            for (let i = range.start; i < range.end; i++) {
-                let cell = document.cells[i];
+            for (let cell of document.getCells(range)) {
                 // create an execution task that handles events like cancellation and perform actions from completing the run execution
                 const execution = vscode.notebook.createNotebookCellExecutionTask(cell.notebook.uri, cell.index, this.id);
                 await this._doExecution(execution);
