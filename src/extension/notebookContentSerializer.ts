@@ -26,18 +26,14 @@ export class GroceryListNotebookContentSerializer implements vscode.NotebookSeri
     // contents from file to VS Code Notebook data
 	public async dataToNotebook(data: Uint8Array): Promise<vscode.NotebookData> {
 		var contents = new TextDecoder().decode(data);    // convert to String to make JSON object
+		let raw: RawNotebookData;
+
 
         // Read file contents
-
-		let raw: RawNotebookData;
 		try {
 			raw = <RawNotebookData>JSON.parse(contents);
 		} catch {
 			raw = { cells: [] };
-		}
-
-		if (raw.cells === undefined) {
-			raw.cells = [];
 		}
 
         // Create array of Notebook cells for the VS Code API from file contents
@@ -52,7 +48,7 @@ export class GroceryListNotebookContentSerializer implements vscode.NotebookSeri
         // Pass read and formatted Notebook Data to VS Code to display Notebook with saved cells
 		return new vscode.NotebookData(
 			cells,
-			new vscode.NotebookDocumentMetadata().with({ cellHasExecutionOrder: true, })
+			new vscode.NotebookDocumentMetadata()
 		);
 	}
 

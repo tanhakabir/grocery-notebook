@@ -12,7 +12,7 @@ exports.groceryList = []; // list of grocery items
 // your extension is activated the very first time the command is executed
 function activate(context) {
     context.subscriptions.push(vscode.notebook.registerNotebookSerializer('grocery-list-notebook', new notebookContentSerializer_1.GroceryListNotebookContentSerializer()), vscode.notebook.registerNotebookKernelProvider({ viewType: 'grocery-list-notebook' }, new notebookExecutionKernel_1.GroceryListNotebookKernelProvider()), 
-    // register our Todo language
+    // register our Grocery List language
     vscode.languages.registerCompletionItemProvider({ language: 'grocery-list' }, new languageCompletionProvider_1.GroceryNotebookCompletionProvider()));
 }
 exports.activate = activate;
@@ -21,6 +21,9 @@ function deactivate() { }
 exports.deactivate = deactivate;
 // functions to edit the grocery list
 function setGroceryList(list) {
+    if (list === undefined) {
+        return;
+    }
     exports.groceryList = list;
 }
 exports.setGroceryList = setGroceryList;
@@ -29,6 +32,9 @@ function addToGroceryList(item) {
 }
 exports.addToGroceryList = addToGroceryList;
 function removeFromGroceryList(index) {
+    if (index < 0 || index > exports.groceryList.length) {
+        throw new Error('Cannot remove item from grocery list with out of bounds index!');
+    }
     exports.groceryList.splice(index - 1, 1);
 }
 exports.removeFromGroceryList = removeFromGroceryList;

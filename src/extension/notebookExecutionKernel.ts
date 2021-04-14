@@ -17,9 +17,8 @@ export class GroceryListNotebookExecutionKernel implements vscode.NotebookKernel
 	async executeCellsRequest(document: vscode.NotebookDocument, ranges: vscode.NotebookCellRange[]): Promise<void> {
         // find the cells that are being asked to run
 		for (let range of ranges) {
-			for (let i = range.start; i < range.end; i++) {
-				let cell = document.cells[i];
-
+			for (let cell of document.getCells(range)) {
+				
                 // create an execution task that handles events like cancellation and perform actions from completing the run execution
 				const execution = vscode.notebook.createNotebookCellExecutionTask(cell.notebook.uri, cell.index, this.id)!;
 				await this._doExecution(execution);
@@ -45,7 +44,7 @@ export class GroceryListNotebookExecutionKernel implements vscode.NotebookKernel
 
             // update the outputs of the cell with options for a simple JSON output or a stylized JSON output
 			execution.replaceOutput([new vscode.NotebookCellOutput([
-				// new vscode.NotebookCellOutputItem('x-application/grocery-list-notebook', groceryList),
+				// new vscode.NotebookCellOutputItem('x-application/grocery-list-notebook', outputData),
 				new vscode.NotebookCellOutputItem('application/json', outputData),
 			], metadata)]);
 
