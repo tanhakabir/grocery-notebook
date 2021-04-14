@@ -21,9 +21,9 @@ class GroceryListNotebookContentSerializer {
         }
         extension_1.setGroceryList(raw.groceryList);
         // Create array of Notebook cells for the VS Code API from file contents
-        const cells = raw.cells.map(item => new vscode.NotebookCellData(item.kind, item.value, item.language, item.outputs ? [new vscode.NotebookCellOutput(item.outputs.map(raw => new vscode.NotebookCellOutputItem(raw.mime, raw.value)))] : [], new vscode.NotebookCellMetadata()));
+        const cells = raw.cells.map(item => new vscode.NotebookCellData(item.kind, item.value, item.language, item.outputs ? [new vscode.NotebookCellOutput(item.outputs.map(raw => new vscode.NotebookCellOutputItem(raw.mime, raw.value)))] : []));
         // Pass read and formatted Notebook Data to VS Code to display Notebook with saved cells
-        return new vscode.NotebookData(cells, new vscode.NotebookDocumentMetadata().with({ cellHasExecutionOrder: true, }));
+        return new vscode.NotebookData(cells);
     }
     // VS Code Notebook data to a string to save to the Notebook file
     async notebookToData(data) {

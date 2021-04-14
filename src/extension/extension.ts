@@ -35,6 +35,7 @@ export function deactivate() { }
 // functions to edit the grocery list
 
 export function setGroceryList(list: string[]) {
+	if(list === undefined) { return; }
 	groceryList = list;
 }
 

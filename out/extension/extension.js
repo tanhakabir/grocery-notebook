@@ -21,6 +21,9 @@ function deactivate() { }
 exports.deactivate = deactivate;
 // functions to edit the grocery list
 function setGroceryList(list) {
+    if (list === undefined) {
+        return;
+    }
     exports.groceryList = list;
 }
 exports.setGroceryList = setGroceryList;
