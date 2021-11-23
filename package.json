@@ -14,24 +14,25 @@
   ],
   "main": "./out/extension/extension.js",
   "contributes": {
-    "notebookProvider": [
+    "notebookRenderer": [
       {
-        "viewType": "grocery-list-notebook",
+        "id": "grocery-list-notebook",
+        "displayName": "Grocery List Notebook",
+        "entrypoint": "./dist/renderer.js",
+        "mimeTypes": [
+          "x-application/grocery-list-notebook"
+        ]
+      }
+    ],
+    "notebooks": [
+      {
+        "id": "grocery-list-notebook",
+        "type": "grocery-list-notebook",
         "displayName": "Grocery List Notebook",
         "selector": [
           {
             "filenamePattern": "*.grocerybook"
           }
-        ]
-      }
-    ],
-    "notebookOutputRenderer": [
-      {
-        "id": "grocery-list-notebook",
-        "entrypoint": "./out/renderer/index.js",
-        "displayName": "Grocery List Notebook",
-        "mimeTypes": [
-          "x-application/grocery-list-notebook"
         ]
       }
     ],

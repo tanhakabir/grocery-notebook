@@ -73,14 +73,14 @@ export class GroceryListNotebookExecutionKernel {
 		switch (text.substring(0, text.indexOf(' '))) {
 			case 'BUY':
 				addToGroceryList(text.substring(text.indexOf(' ') + 1));
-				break;
+				return;
 		  	case 'REMOVE':
 				const index = parseInt(text.substring(text.indexOf(' ') + 1));
 				if(index === NaN) { throw new Error('Cannot remove item from grocery list at index that does not exist!'); }
 				removeFromGroceryList(index);
-				break;
+				return;
 		  	case 'LIST':
-				break;
+				return;
 		  	default:
 				throw new Error('Unexpected action! Please use BUY, REMOVE, or LIST');
 		}
