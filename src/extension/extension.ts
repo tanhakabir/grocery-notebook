@@ -3,8 +3,8 @@
 import * as vscode from 'vscode';
 
 import { GroceryListNotebookContentSerializer } from './notebookContentSerializer';
-import { GroceryListNotebookKernelProvider } from './notebookExecutionKernel';
 import { GroceryNotebookCompletionProvider } from './languageCompletionProvider';
+import { GroceryListNotebookExecutionKernel } from './notebookExecutionKernel';
 
 export var groceryList: string[] = [];  // list of grocery items 
 
@@ -13,14 +13,12 @@ export var groceryList: string[] = [];  // list of grocery items
 export function activate(context: vscode.ExtensionContext) {
 
 	context.subscriptions.push(
-		vscode.notebook.registerNotebookSerializer(
-			'grocery-list-notebook', new GroceryListNotebookContentSerializer()
+		new GroceryListNotebookExecutionKernel(),
+		vscode.workspace.registerNotebookSerializer(
+			'grocery-list-notebook',
+			new GroceryListNotebookContentSerializer()
 		),
-		vscode.notebook.registerNotebookKernelProvider(
-			{ viewType: 'grocery-list-notebook' },
-			new GroceryListNotebookKernelProvider(),
-		), 
-		
+
 		// register our Grocery List language
 		vscode.languages.registerCompletionItemProvider({ language: 'grocery-list' }, new GroceryNotebookCompletionProvider())
 	);

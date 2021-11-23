@@ -1,65 +1,88 @@
 import * as vscode from 'vscode';
 import { groceryList, addToGroceryList, removeFromGroceryList } from './extension';
 
-export class GroceryListNotebookKernelProvider implements vscode.NotebookKernelProvider {
-	provideKernels(): vscode.ProviderResult<vscode.NotebookKernel[]> {
-		return [new GroceryListNotebookExecutionKernel()];
-	}
-}
-
-export class GroceryListNotebookExecutionKernel implements vscode.NotebookKernel {
+export class GroceryListNotebookExecutionKernel {
 	readonly id = 'grocery-list-notebook-kernel';
+	readonly notebookType = 'grocery-list-notebook';
 	public readonly label = 'Grocery List Notebook Kernel';
-	readonly supportedLanguages = ['json'];
+	readonly supportedLanguages = ['grocery-list'];
 
+	private readonly _controller: vscode.NotebookController;
 	private _executionOrder = 0;
 
-	async executeCellsRequest(document: vscode.NotebookDocument, ranges: vscode.NotebookCellRange[]): Promise<void> {
-        // find the cells that are being asked to run
-		for (let range of ranges) {
-			for (let cell of document.getCells(range)) {
-				
-                // create an execution task that handles events like cancellation and perform actions from completing the run execution
-				const execution = vscode.notebook.createNotebookCellExecutionTask(cell.notebook.uri, cell.index, this.id)!;
-				await this._doExecution(execution);
-			}
+	constructor() {
+		this._controller = vscode.notebooks.createNotebookController(this.id, this.notebookType, this.label);
+
+		this._controller.supportedLanguages = this.supportedLanguages;
+		this._controller.supportsExecutionOrder = true;
+		this._controller.description = 'A notebook for managing a grocery list.';
+		this._controller.executeHandler = this._executeAll.bind(this);
+	}
+
+	dispose(): void {
+		this._controller.dispose();
+	}
+
+	private _executeAll(cells: vscode.NotebookCell[], _notebook: vscode.NotebookDocument, _controller: vscode.NotebookController): void {
+        for (let cell of cells) {
+			this._doExecution(cell);
 		}
 	}
 
-	private async _doExecution(execution: vscode.NotebookCellExecutionTask): Promise<void> {
-		const cell = await vscode.workspace.openTextDocument(execution.cell.document.uri);   // find cell in notebook to get code from
+	private async _doExecution(cell: vscode.NotebookCell): Promise<void> {
+		const execution = this._controller.createNotebookCellExecution(cell);
 
-		// start a timer
-		execution.executionOrder = ++this._executionOrder;
-		execution.start({ startTime: Date.now() });
-
-		const metadata = {
-			startTime: Date.now()
-		};
+		// update metadata
+        execution.executionOrder = ++this._executionOrder;
+		execution.start(Date.now()); 
 
 		// do the work
 		try {
 			// this is where we'd do our "compiling" before outputting results
-			const outputData = JSON.parse(cell.getText());
+			this._processCell(cell.document.getText());
 
             // update the outputs of the cell with options for a simple JSON output or a stylized JSON output
 			execution.replaceOutput([new vscode.NotebookCellOutput([
-				// new vscode.NotebookCellOutputItem('x-application/grocery-list-notebook', outputData),
-				new vscode.NotebookCellOutputItem('application/json', outputData),
-			], metadata)]);
-
-			execution.end({ success: true });
-		} catch (err) {
-
-            // something went wrong and we need to update the output of the cell to be showing an error
-			execution.replaceOutput([new vscode.NotebookCellOutput([
-				new vscode.NotebookCellOutputItem('application/x.notebook.error-traceback', {
-					ename: err instanceof Error && err.name || 'error',
-					evalue: err instanceof Error && err.message || JSON.stringify(err, undefined, 4),
-					traceback: []
-				})
+				vscode.NotebookCellOutputItem.json(groceryList, 'x-application/grocery-list-notebook'),
+				vscode.NotebookCellOutputItem.json(groceryList)
 			])]);
-			execution.end({ success: false });
+
+			execution.end(true, Date.now());
+		} catch (err) {
+            // something went wrong and we need to update the output of the cell to be showing an error
+			execution.replaceOutput([
+				new vscode.NotebookCellOutput([
+					vscode.NotebookCellOutputItem.error({ 
+						name: err instanceof Error && err.name || 'error', 
+						message: err instanceof Error && err.message || JSON.stringify(err, undefined, 4)})
+				])
+			]);
+			execution.end(false, Date.now());
+		}
+	}
+
+	// my "compiler"
+	private _processCell(text: string) {
+		// my language consists of the action followed by a space and then the parameter
+
+		// example input:
+		// BUY milk
+		// REMOVE 2
+		// LIST
+	
+		switch (text.substring(0, text.indexOf(' '))) {
+			case 'BUY':
+				addToGroceryList(text.substring(text.indexOf(' ') + 1));
+				break;
+		  	case 'REMOVE':
+				const index = parseInt(text.substring(text.indexOf(' ') + 1));
+				if(index === NaN) { throw new Error('Cannot remove item from grocery list at index that does not exist!'); }
+				removeFromGroceryList(index);
+				break;
+		  	case 'LIST':
+				break;
+		  	default:
+				throw new Error('Unexpected action! Please use BUY, REMOVE, or LIST');
 		}
 	}
 }
