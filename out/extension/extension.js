@@ -5,13 +5,13 @@ exports.removeFromGroceryList = exports.addToGroceryList = exports.setGroceryLis
 // Import the module and reference it with the alias vscode in your code below
 const vscode = require("vscode");
 const notebookContentSerializer_1 = require("./notebookContentSerializer");
-const notebookExecutionKernel_1 = require("./notebookExecutionKernel");
 const languageCompletionProvider_1 = require("./languageCompletionProvider");
+const notebookExecutionKernel_1 = require("./notebookExecutionKernel");
 exports.groceryList = []; // list of grocery items 
 // This method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 function activate(context) {
-    context.subscriptions.push(vscode.notebook.registerNotebookSerializer('grocery-list-notebook', new notebookContentSerializer_1.GroceryListNotebookContentSerializer()), vscode.notebook.registerNotebookKernelProvider({ viewType: 'grocery-list-notebook' }, new notebookExecutionKernel_1.GroceryListNotebookKernelProvider()), 
+    context.subscriptions.push(new notebookExecutionKernel_1.GroceryListNotebookExecutionKernel(), vscode.workspace.registerNotebookSerializer('grocery-list-notebook', new notebookContentSerializer_1.GroceryListNotebookContentSerializer()), 
     // register our Grocery List language
     vscode.languages.registerCompletionItemProvider({ language: 'grocery-list' }, new languageCompletionProvider_1.GroceryNotebookCompletionProvider()));
 }
