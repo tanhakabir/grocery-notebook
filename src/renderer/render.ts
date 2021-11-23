@@ -6,12 +6,10 @@
 // names into JavaScript: https://github.com/css-modules/css-modules
 // You can configure or change this in the webpack.config.js file.
 import * as style from './style.css';
-import type { NotebookRendererApi } from 'vscode-notebook-renderer';
 
 interface IRenderInfo {
 	container: HTMLElement;
 	data: any;
-	notebookApi: NotebookRendererApi<unknown>;
 }
 
 // This function is called to render your contents.
@@ -20,6 +18,18 @@ export function render({ container, data }: IRenderInfo) {
 	pre.classList.add(style.json);
 
 	// do rendering for output here
+	const list = document.createElement('ol');
+
+	const groceryList: string[] = Array.isArray(data) ? data : [];
+
+	for(const item of groceryList) {
+		const listItem = document.createElement('li');
+		listItem.textContent = item;
+		list.appendChild(listItem);
+	}
+
+	pre.appendChild(list);
+
 
 	container.appendChild(pre);
 }

@@ -18,7 +18,7 @@
       {
         "id": "grocery-list-notebook",
         "displayName": "Grocery List Notebook",
-        "entrypoint": "./dist/renderer.js",
+        "entrypoint": "./out/renderer/index.js",
         "mimeTypes": [
           "x-application/grocery-list-notebook"
         ]
@@ -64,7 +64,7 @@
     "@types/mocha": "^8.0.4",
     "@types/node": "^12.11.7",
     "@types/vscode": "^1.62.0",
-    "@types/vscode-notebook-renderer": "^1.48.0",
+    "@types/vscode-notebook-renderer": "^1.60.0",
     "@types/webpack-env": "^1.16.0",
     "@typescript-eslint/eslint-plugin": "^4.14.1",
     "@typescript-eslint/parser": "^4.14.1",
