@@ -10,12 +10,15 @@ const makeConfig = (argv, { entry, out, target, library = 'commonjs' }) => ({
     output: {
         path: path.join(__dirname, path.dirname(out)),
         filename: path.basename(out),
-        publicPath: '',
         libraryTarget: library,
         chunkFormat: library,
     },
+    externals: {
+      vscode: 'commonjs vscode',
+    },
     resolve: {
         extensions: ['.ts', '.tsx', '.js', '.jsx', '.css'],
+        fallback: { "util": require.resolve("util/") }
     },
     experiments: {
         outputModule: true,
@@ -72,7 +75,7 @@ const makeConfig = (argv, { entry, out, target, library = 'commonjs' }) => ({
 });
 
 module.exports = (env, argv) => [
-    makeConfig(argv, { entry: './src/client/index.ts', out: './out/client/index.js', target: 'web', library: 'module' }),
+    makeConfig(argv, { entry: './src/renderer/index.ts', out: './out/renderer/index.js', target: 'web', library: 'module' }),
     makeConfig(argv, { entry: './src/extension/extension.ts', out: './out/extension/extension.js', target: 'node' }),
     makeConfig(argv, { entry: './src/extension/extension.ts', out: './out/extension/extension.web.js', target: 'webworker' }),
 ];
