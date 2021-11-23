@@ -80,7 +80,7 @@
     "vscode-dts": "^0.3.1",
     "vscode-notebook-error-overlay": "^1.0.1",
     "vscode-test": "^1.5.0",
-    "webpack": "^5.19.0",
+    "webpack": "^5.64.2",
     "webpack-cli": "^4.4.0",
     "webpack-dev-server": "^3.11.2"
   }
